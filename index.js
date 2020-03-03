@@ -2,27 +2,71 @@ const axios = require("axios");
 const inquirer = require("inquirer");
 const fs = require('fs');
 const chalk = require('chalk');
-
-const inqQuestion = require("./InqOut");
-
-let answerObj = {};
-
-inqQuestion(`browneyes`, `confirm`, `Are your eyes brown?`)
-// inqQuestion(`country`, `input`, `What is your favorite country?`)
-
-// async function runFunc() {
-//     await inqQuestion(`blueeyes`, `confirm`, `Are your eyes blue?`)
-//     await inqQuestion("state", "input", "What State were you born in?")
-//     await inqQuestion(`country`, `input`, `What is your favorite country?`)
-//     await inqQuestion(`arrested`, `confirm`, `Have you ever been arrested?`) 
-// }
-
-// async function runFunc2() {
-//     await inqQuestion(`country`, `input`, `What is your favorite country?`)
-//     await inqQuestion(`arrested`, `confirm`, `Have you ever been arrested?`) 
-// }
+const figlet = require('figlet');
 
 
-// runFunc();
-// runFunc2();
+console.clear();
 
+async function runProgram() {
+    await header();
+    await questions();
+}
+
+
+function header() {
+
+return figlet('  Password Generator!!', function(err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err);
+        return;
+    }
+    console.log(data)
+    console.log(chalk.bold.yellow("         Welcome to the CLI Password Generator!"));
+    console.log(chalk.bold.yellow(""));
+    console.log(chalk.bold.yellow("         Based on your choice of length and caracters, I will generate a random password."));
+    console.log("");
+});
+};
+
+function questions() {
+   return inquirer.prompt([
+      {
+        type: "number",
+        message: "How long would you like your password to be (8 to 128 characters)?",
+        name: "length",
+        default: "8"
+      },
+      {
+        type: "confirm",
+        message: "Would you like Upper Case letters",
+        name: "uppercase"
+      },
+      {
+          type: "confirm",
+          message: "Would you like lower Case letters",
+          name: "lowercase"
+        },
+        {
+          type: "confirm",
+          message: "Would you like numbers",
+          name: "numbers"
+        },
+        {
+          type: "confirm",
+          message: "Would you like Special Characters ($%%#)?",
+          name: "special"
+        },
+    ])
+    .then(function(response) {
+  
+      if (response.confirm === response.password) {
+        console.log(response);
+      }
+      else {
+        console.log("You forgot your password already?!");
+      }
+    });
+}
+
+runProgram();

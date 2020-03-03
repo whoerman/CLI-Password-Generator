@@ -5,10 +5,10 @@ const inquirer = require("inquirer");
 let answer = function inqQuestion(nameInput, typeInput, messageInput) {
     return inquirer.prompt([{
         type: typeInput,
-        message: messageInput,
+        message: `      `+messageInput,
         name: nameInput
     }]).then(function (currentAnswer) {
-        console.log(currentAnswer);         // need to return this out
+        // console.log(currentAnswer);         // need to return this out
     }).catch(error => {
         if (error.isTTyError) {
             console.log("unable to process");
