@@ -2,7 +2,7 @@ const inquirer = require("inquirer");
 
 
 //format the inquirer
-function inqQuestion(nameInput, typeInput, messageInput) {
+let answer = function inqQuestion(nameInput, typeInput, messageInput) {
     return inquirer.prompt([{
         type: typeInput,
         message: messageInput,
@@ -19,10 +19,4 @@ function inqQuestion(nameInput, typeInput, messageInput) {
 }
 
 
-inqQuestion(`country`, `input`, `What is your favorite country?`);
-
-// inqQuestion(`blueeyes`, `confirm`, `Are your eyes blue?`);
-
-// inqQuestion("state", "input", "What State were you born in?");
-
-// module.exports = questionInput;
+module.exports = answer;
