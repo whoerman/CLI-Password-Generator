@@ -4,69 +4,44 @@ const fs = require('fs');
 const chalk = require('chalk');
 const figlet = require('figlet');
 
+const questions = require("./inquirerQuestions");
+
+let passwordString = ""
 
 console.clear();
 
 async function runProgram() {
-    await header();
-    await questions();
+    await questions().then(function (response) {
+        let length = response.length;
+        let uppercase = response.uppercase;
+        let lowercase = response.lowercase;
+        let numbers = response.numbers;
+        let special = response.special;
+        let choiceArray = [uppercase, lowercase, numbers, special];
+        generatePassword(length, uppercase, lowercase, numbers, special)
+        
+        function generatePassword() {
+            let mathArray = [
+                String.fromCharCode(Math.floor(Math.random() * (90 - 65 + 1)) + 65),
+                String.fromCharCode(Math.floor(Math.random() * (122 - 97 + 1)) + 97),
+                String.fromCharCode(Math.floor(Math.random() * (57 - 48 + 1)) + 48),
+                String.fromCharCode(Math.floor(Math.random() * (47 - 38 + 1)) + 38)
+            ];
+            let type = (Math.floor(Math.random() * 4) + 0);
+            if (choiceArray[type]) {
+                passwordString = passwordString + mathArray[type]
+            }
+            if (passwordString.length < length) {
+                generatePassword();
+            } else {
+                console.log(chalk.bold.yellow(""));
+                console.log(chalk.bold.yellow(`               Here is your password:`));
+                console.log(chalk.bold.yellow(""));
+                console.log(chalk.bold.red(`            ${passwordString}`));
+            }
+
+        }
+        });
 }
 
-
-function header() {
-
-return figlet('  Password Generator!!', function(err, data) {
-    if (err) {
-        console.log('Something went wrong...');
-        console.dir(err);
-        return;
-    }
-    console.log(data)
-    console.log(chalk.bold.yellow("         Welcome to the CLI Password Generator!"));
-    console.log(chalk.bold.yellow(""));
-    console.log(chalk.bold.yellow("         Based on your choice of length and caracters, I will generate a random password."));
-    console.log("");
-});
-};
-
-function questions() {
-   return inquirer.prompt([
-      {
-        type: "number",
-        message: "How long would you like your password to be (8 to 128 characters)?",
-        name: "length",
-        default: "8"
-      },
-      {
-        type: "confirm",
-        message: "Would you like Upper Case letters",
-        name: "uppercase"
-      },
-      {
-          type: "confirm",
-          message: "Would you like lower Case letters",
-          name: "lowercase"
-        },
-        {
-          type: "confirm",
-          message: "Would you like numbers",
-          name: "numbers"
-        },
-        {
-          type: "confirm",
-          message: "Would you like Special Characters ($%%#)?",
-          name: "special"
-        },
-    ])
-    .then(function(response) {
-  
-      if (response.confirm === response.password) {
-        console.log(response);
-      }
-      else {
-        console.log("You forgot your password already?!");
-      }
-    });
-}
-
-runProgram();
+runProgram()
